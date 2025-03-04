@@ -1,0 +1,79 @@
+#include <iostream>
+#include <iomanip>
+#include <cctype>
+
+using namespace std;
+
+struct HourlyPaid {
+    double HoursWorked;
+    double HourlyRate;
+};
+
+struct Salaried {
+    double Salary;
+    double Bonus;
+};
+
+union Worker {
+    HourlyPaid hourly;
+    Salaried salaried;
+};
+
+int main() {
+    Worker worker;
+    char workerType;
+    double pay;
+
+    cout << "Enter 'H' for hourly paid worker or 'S' for salaried worker: ";
+    cin >> workerType;
+
+    if (toupper(workerType) == 'H') {
+
+        cout << "Enter hours worked (0-80): ";
+        cin >> worker.hourly.HoursWorked;
+
+        if (worker.hourly.HoursWorked < 0 || worker.hourly.HoursWorked > 80) {
+            cout << "Invalid input for hours worked.";
+            return 1;
+        }
+        
+        cout << "Enter hourly rate (non-negative): ";
+        cin >> worker.hourly.HourlyRate;
+        
+        if (worker.hourly.HourlyRate < 0) {
+            cout << "Invalid input for hourly rate.";
+            return 1;
+        }
+
+        pay = worker.hourly.HoursWorked * worker.hourly.HourlyRate;
+
+    } else if (toupper(workerType) == 'S') {
+        
+        cout << "Enter salary (non-negative): ";
+        cin >> worker.salaried.Salary;
+        if (worker.salaried.Salary < 0) {
+            cout << "Invalid input for salary.";
+            return 1;
+        }
+
+        cout << "Enter bonus (non-negative): ";
+        cin >> worker.salaried.Bonus;
+        if (worker.salaried.Bonus < 0) {
+            cout << "Invalid input for bonus.";
+            return 1;
+        }
+
+        pay = worker.salaried.Salary + worker.salaried.Bonus;
+
+    } else {
+
+        cout << "Invalid worker type.";
+        return 1;
+
+    }
+
+    cout << fixed << setprecision(2);
+    cout << "Total pay: $" << pay << endl;
+
+    return 0;
+}
